@@ -1,0 +1,25 @@
+{
+    "name": "my-christmas-project",
+    "version": "1.0.0",
+    "type": "module",
+    "description": "An unusual, software-engineer-themed telling of the night before Christmas",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "test": "NODE_OPTIONS=--experimental-vm-modules jest"
+    },
+    "keywords": [
+        "Christmas",
+        "Node.js",
+        "Software Engineer",
+        "DevContainer"
+    ],
+    "author": "Your Name",
+    "license": "MIT",
+    "dependencies": {
+        "chalk": "^5.4.1"
+    },
+    "devDependencies": {
+        "jest": "^29.7.0"
+    }
+}
