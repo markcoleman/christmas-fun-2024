@@ -1,7 +1,10 @@
 # .github/workflows/ci.yml
 
 name: CI - Validate & Report Tests
-
+permissions:
+  id-token: write
+  contents: read
+  checks: write
 on:
   push:
     branches: [ "main" ]
@@ -26,14 +29,11 @@ jobs:
       - name: Run tests with coverage & JUnit
         run: npm test  # uses the "test" script from package.json
 
-      - name: Upload JUnit test results
-        uses: actions/upload-artifact@v3
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()    # run this step even if previous step failed
         with:
-          name: junit-results
-          path: test-results/jest-junit.xml
-
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage-report
-          path: coverage
+          name: JEST Tests            # Name of the check run which will be created
+          path: test-results/jest-*.xml    # Path to test results
+          reporter: jest-junit        # Format of test results
+            
