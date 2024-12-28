@@ -1,0 +1,39 @@
+# .github/workflows/ci.yml
+
+name: CI - Validate & Report Tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16  # or 18, etc.
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests with coverage & JUnit
+        run: npm test  # uses the "test" script from package.json
+
+      - name: Upload JUnit test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: junit-results
+          path: test-results/jest-junit.xml
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage
