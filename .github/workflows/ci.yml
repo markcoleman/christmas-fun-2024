@@ -26,14 +26,6 @@ jobs:
       - name: Run tests with coverage & JUnit
         run: npm test  # uses the "test" script from package.json
 
-      - name: Upload JUnit test results
-        uses: actions/upload-artifact@v3
-        with:
-          name: junit-results
-          path: test-results/jest-junit.xml
-
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage-report
-          path: coverage
+      - name: Test Reporter
+        uses: dorny/test-reporter@v1.9.1
+            
