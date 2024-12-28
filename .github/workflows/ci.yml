@@ -1,7 +1,10 @@
 # .github/workflows/ci.yml
 
 name: CI - Validate & Report Tests
-
+permissions:
+  id-token: write
+  contents: read
+  checks: write
 on:
   push:
     branches: [ "main" ]
