@@ -1,7 +1,11 @@
-name-template: 'v$NEXT_PATCH_VERSION'
-tag-template: 'v$NEXT_PATCH_VERSION'
+name-template: 'v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
 
-# Categories help group pull requests by type
+# A required field: the release note "template" describes how everything is laid out
+template: |
+  ## What's Changed
+  $CHANGES
+
 categories:
   - title: '🚀 Features'
     labels:
@@ -14,6 +18,23 @@ categories:
       - 'chore'
       - 'refactor'
 
-change-template: '- $TITLE (@$AUTHOR) [#$NUMBER]($URL)'
+# Each PR will appear with this format
+change-template: '- $TITLE ([#$NUMBER]($URL)) @$AUTHOR'
+
+# If no PRs match the configured labels, show this instead
 no-changes-template: '- No changes'
-version-resolver: 'increase-minor'
+
+# version-resolver is now an object
+# This example:
+# - bumps major if PR has label "breaking"
+# - bumps minor if PR has label "feature"
+# - bumps patch if PR has label "fix"
+# - defaults to patch otherwise
+version-resolver:
+  major:
+    label: 'breaking'
+  minor:
+    label: 'feature'
+  patch:
+    label: 'fix'
+  default: patch
