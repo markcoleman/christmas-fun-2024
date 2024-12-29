@@ -1,0 +1,19 @@
+name-template: 'v$NEXT_PATCH_VERSION'
+tag-template: 'v$NEXT_PATCH_VERSION'
+
+# Categories help group pull requests by type
+categories:
+  - title: '🚀 Features'
+    labels:
+      - 'feature'
+  - title: '🐛 Fixes'
+    labels:
+      - 'bug'
+  - title: '🧰 Maintenance'
+    labels:
+      - 'chore'
+      - 'refactor'
+
+change-template: '- $TITLE (@$AUTHOR) [#$NUMBER]($URL)'
+no-changes-template: '- No changes'
+version-resolver: 'increase-minor'
