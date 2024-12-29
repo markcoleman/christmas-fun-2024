@@ -5,17 +5,11 @@ on:
     tags:
       - 'v*.*.*'  # Trigger on tags like v1.2.3
 
-permissions:
-  contents: write  # Needed to create/publish releases
-  packages: write    # <-- Needed for pushing images to GHCR
-
+permissions: write-all
 jobs:
   update_release_draft:
-    permissions:
-      contents: write      # Required to publish a GitHub release
-      pull-requests: write # Required if you're using autolabeler or advanced PR-based features
     runs-on: ubuntu-latest
-
+    
     steps:
       # 1. Check out your repo
       - name: Check out
