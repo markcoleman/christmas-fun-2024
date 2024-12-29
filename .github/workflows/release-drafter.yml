@@ -1,0 +1,33 @@
+name: "Release Drafter"
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Trigger on version-like tags, e.g., v1.2.3
+
+permissions:
+  contents: write  # Needed to create/publish releases
+
+jobs:
+  update_release_draft:
+    permissions:
+        # write permission is required to create a github release
+        contents: write
+        # write permission is required for autolabeler
+        # otherwise, read permission is required at least
+        pull-requests: write
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Run Release Drafter
+        uses: release-drafter/release-drafter@v5
+        with:
+          version: ${{ github.ref_name }}    # The pushed tag, e.g. v1.2.3
+          # The action also respects .github/release-drafter.yml for how to build notes
+          # Use 'publish' if you want it to immediately be published
+          # instead of staying as a draft
+          publish: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
