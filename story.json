@@ -1,0 +1,147 @@
+[
+    {
+      "text": "Once upon a time, in a codebase far, far away...\n",
+      "color": "cyan",
+      "delay": 1000
+    },
+    {
+      "text": "It was the night before Christmas, and all through the repo...",
+      "color": "cyan",
+      "delay": 1000
+    },
+    {
+      "text": "Not a single pipeline was failing—not even a flake or two.\n",
+      "color": "cyan",
+      "delay": 1500
+    },
+    {
+      "text": "Pull requests were hung by the pipeline with care,",
+      "color": "green",
+      "delay": 1000
+    },
+    {
+      "text": "In hopes that the CI/CD soon would be there.",
+      "color": "green",
+      "delay": 1500
+    },
+    {
+      "text": "The engineers were nestled all snug at their desks,",
+      "color": "green",
+      "delay": 1000
+    },
+    {
+      "text": "While visions of merged branches danced in their heads.\n",
+      "color": "green",
+      "delay": 1500
+    },
+    {
+      "text": "With code reviews done and commit messages read,",
+      "color": "green",
+      "delay": 1000
+    },
+    {
+      "text": "They took a quick nap, ignoring the dreaded 'Needs Rebase' thread.",
+      "color": "green",
+      "delay": 1500
+    },
+    {
+      "text": "When out on the Slack channel there arose such a clatter,",
+      "color": "yellow",
+      "delay": 1000
+    },
+    {
+      "text": "I sprang from my spinny chair to see what was the matter.\n",
+      "color": "yellow",
+      "delay": 1500
+    },
+    {
+      "text": "Away to the console I flew like a flash,",
+      "color": "yellow",
+      "delay": 1000
+    },
+    {
+      "text": "Tore open the logs, hoping the server didn't crash.",
+      "color": "yellow",
+      "delay": 1500
+    },
+    {
+      "text": "The moon on the bytes of the new-pushed code,",
+      "color": "blue",
+      "delay": 1000
+    },
+    {
+      "text": "Gave the luster of midnight releases about to explode.\n",
+      "color": "blue",
+      "delay": 1500
+    },
+    {
+      "text": "When, what to my wondering eyes should appear,",
+      "color": "blue",
+      "delay": 1000
+    },
+    {
+      "text": "But a miniature release note, and eight fresh unit tests, oh dear!",
+      "color": "blue",
+      "delay": 1500
+    },
+    {
+      "text": "With a little old driver, so agile and quick,",
+      "color": "blue",
+      "delay": 1000
+    },
+    {
+      "text": "I knew in a moment it must be St. Nick— Wait, that’s not quite right...\n",
+      "color": "blue",
+      "delay": 1500
+    },
+    {
+      "text": "Actually, it was just Jenkins, wearing a Santa hat!",
+      "color": "magenta",
+      "delay": 1000
+    },
+    {
+      "text": "He whistled, and shouted, “All jobs are green, how about that!”",
+      "color": "magenta",
+      "delay": 1500
+    },
+    {
+      "text": "He ran all the lints, to his team gave a wave,",
+      "color": "magenta",
+      "delay": 1000
+    },
+    {
+      "text": "Deploying fresh code from GitHub to live.\n",
+      "color": "magenta",
+      "delay": 1500
+    },
+    {
+      "text": "\n----------------------------------------\n",
+      "color": "red",
+      "delay": 0
+    },
+    {
+      "text": "Happy Holidays from your friendly dev environment!",
+      "color": "bold", 
+      "delay": 0
+    },
+    {
+      "text": "May your commits be clean and your builds be serene!",
+      "color": "bold",
+      "delay": 0
+    },
+    {
+      "text": "\n----------------------------------------\n",
+      "color": "red",
+      "delay": 0
+    },
+    {
+      "text": "~ End of our unusual tale ~\n",
+      "color": "cyanBright",
+      "delay": 1000
+    },
+    {
+      "text": "** 🎄 Merry Christmas & Happy Coding! 🎄 **",
+      "color": "whiteBright",
+      "delay": 0
+    }
+  ]
