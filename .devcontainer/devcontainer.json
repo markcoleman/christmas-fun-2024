@@ -10,7 +10,8 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"openai.openai-chatgpt-adhoc"
+				"openai.openai-chatgpt-adhoc",
+				"ms-vscode-remote.remote-containers"
 			]
 		}
 	}
