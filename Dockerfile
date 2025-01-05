@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copy package.json + package-lock.json first, then install
 COPY package*.json ./
-RUN npm install
+RUN npm install --omit=dev --ignore-scripts
 
 # Copy the rest of your source code (index.js, asciiArt.js, etc.)
 COPY . .
