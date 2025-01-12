@@ -1,10 +1,10 @@
-# .github/workflows/ci.yml
-
 name: CI - Validate & Report Tests
+
 permissions:
   id-token: write
   contents: read
   checks: write
+
 on:
   push:
     branches: [ "main" ]
@@ -23,17 +23,34 @@ jobs:
         with:
           node-version: 16  # or 18, etc.
 
+      # 1) Cache Node modules
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          # 'path' is what we want to store in cache
+          path: |
+            node_modules
+          # 'key' is a unique identifier for the cache
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          # 'restore-keys' is a fallback list in case the exact key isn't found
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # 2) Install dependencies
       - name: Install dependencies
         run: npm install
+        # npm install will skip re-downloading if node_modules are already present
+        # but it will still check if updates are needed
 
+      # 3) Run tests with coverage & JUnit
       - name: Run tests with coverage & JUnit
         run: npm test  # uses the "test" script from package.json
 
+      # 4) Test Report
       - name: Test Report
         uses: dorny/test-reporter@v1
         if: success() || failure()    # run this step even if previous step failed
         with:
-          name: JEST Tests            # Name of the check run which will be created
-          path: test-results/jest-*.xml    # Path to test results
-          reporter: jest-junit        # Format of test results
-            
+          name: JEST Tests
+          path: test-results/jest-*.xml
+          reporter: jest-junit
