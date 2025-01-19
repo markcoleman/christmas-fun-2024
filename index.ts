@@ -1,8 +1,10 @@
-// index.js
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+// index.ts
 import chalk from "chalk";
+/**
+ * This import works if `resolveJsonModule` is true in your tsconfig,
+ * and your environment supports importing JSON.
+ */
+import storyJson from "./story.json" with { type: "json" };
 
 import { christmasTree, santaClaus } from "./asciiArt.js";
 import { logWithDelay } from "./logWithDelay.js";
@@ -14,15 +16,27 @@ import {
   codeCoverage,
 } from "./easterEggs.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+/**
+ * If you want typed access to the JSON,
+ * define an interface for each line.
+ */
+interface StoryLine {
+  text: string;
+  color: string;
+  delay: number;
+}
 
-// Load the story lines from story.json
-const storyPath = path.join(__dirname, "story.json");
-const storyData = JSON.parse(fs.readFileSync(storyPath, "utf-8"));
+/**
+ * Then cast or assert your imported JSON to that shape:
+ */
+const storyData = storyJson as StoryLine[];
 
-// Map color strings to chalk functions or fallback to white
-const colorMap = {
+/**
+ * Map color strings to Chalk functions (or fallback to chalk.white)
+ */
+type ChalkFunction = (text: string) => string;
+
+const colorMap: Record<string, ChalkFunction> = {
   cyan: chalk.cyan,
   green: chalk.green,
   yellow: chalk.yellow,
@@ -33,10 +47,12 @@ const colorMap = {
   greenBright: chalk.greenBright,
   cyanBright: chalk.cyanBright,
   whiteBright: chalk.whiteBright,
-  // ...
 };
 
-export async function main() {
+/**
+ * Main function to run the story
+ */
+export async function main(): Promise<void> {
   console.clear();
 
   // Easter Egg #1
@@ -54,7 +70,7 @@ export async function main() {
   // Easter Egg #4: Rare debug
   await debugEasterEgg();
 
-  // Now loop through the story from story.json
+  // Now loop through the story lines
   for (const { text, color, delay } of storyData) {
     const colorFn = colorMap[color] || chalk.white;
     await logWithDelay(colorFn(text), delay);
@@ -64,8 +80,13 @@ export async function main() {
   await codeCoverage();
 }
 
-// If running directly from CLI
-if (__filename === process.argv[1]) {
+/**
+ * If this file is run directly via the command line (Node ESM),
+ * we call main().
+ * In ESM, we compare import.meta.url to process.argv[1],
+ * or you can replicate the logic with fileURLToPath if desired.
+ */
+if (import.meta.url === `file://${process.argv[1]}`) {
   main().catch((err) => {
     console.error(chalk.red("An error occurred:", err));
   });

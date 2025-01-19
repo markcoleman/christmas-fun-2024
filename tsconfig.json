@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+      "target": "es2022",
+      "module": "nodenext",            // or "nodenext", or "preserve"
+      "moduleResolution": "nodenext",
+      "outDir": "dist",
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true,
+      "skipLibCheck": true,
+      "strict": true,
+      "resolveJsonModule": true
+    },
+    "include": ["index.ts", "asciiArt.js", "logWithDelay.ts", "easterEggs.ts",  "__tests__"]
+  }

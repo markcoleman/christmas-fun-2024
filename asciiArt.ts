@@ -1,8 +1,10 @@
-// asciiArt.js
-import chalk from 'chalk';
+// asciiArt.ts
+import chalk from "chalk";
 
-// A festive ASCII Christmas tree
-export const christmasTree = `
+/**
+ * A festive ASCII Christmas tree
+ */
+export const christmasTree: string = `
          ${chalk.yellowBright("★")}
         ${chalk.greenBright("oOo")}
        ${chalk.greenBright("oOoOo")}
@@ -13,8 +15,10 @@ export const christmasTree = `
        ${chalk.magentaBright("ENGINEER")}
 `;
 
-// A simple Santa Claus ASCII
-export const santaClaus = `
+/**
+ * A simple Santa Claus ASCII
+ */
+export const santaClaus: string = `
         ${chalk.bgRed.white("Ho Ho Ho!")}
            ${chalk.white("_____")}
          ${chalk.red("<(")} ${chalk.white("^ ^")} ${chalk.red(")>")}
