@@ -34,5 +34,7 @@ RUN npm install --omit=dev --ignore-scripts
 # Force Chalk to use color
 ENV FORCE_COLOR=1
 
+ENV LANGUAGE=en
+
 # Run the compiled code by default
 CMD ["node", "dist/index.js"]

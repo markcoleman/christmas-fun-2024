@@ -1,10 +1,50 @@
 // index.ts
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 import chalk from "chalk";
 /**
  * This import works if `resolveJsonModule` is true in your tsconfig,
  * and your environment supports importing JSON.
  */
-import storyJson from "./story.json" with { type: "json" };
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Or pass a param to main, or read from config. Then build the file name:
+const userLang = process.env.LANGUAGE || "en";
+const storyPath = path.join(__dirname, `story.${userLang}.json`);
+
+// We'll define an English fallback path
+const englishFallbackPath = path.join(__dirname, "story.en.json");
+
+let storyData: StoryLine[] = [];
+
+// Try user-chosen language first
+try {
+  const raw = fs.readFileSync(storyPath, "utf-8");
+  storyData = JSON.parse(raw) as StoryLine[];
+  console.log(chalk.cyan(`Loaded story for language: ${userLang}`));
+} catch (err) {
+  console.error(
+    chalk.red(
+      `Could not load story for language '${userLang}'. Falling back to English.`,
+    ),
+  );
+
+  // Attempt English fallback
+  try {
+    const rawFallback = fs.readFileSync(englishFallbackPath, "utf-8");
+    storyData = JSON.parse(rawFallback) as StoryLine[];
+    console.log(chalk.yellow("Loaded English fallback story."));
+  } catch (err2) {
+    console.error(
+      chalk.red("Failed to load the English fallback story. Exiting."),
+      err2,
+    );
+    process.exit(1);
+  }
+}
 
 import { christmasTree, santaClaus } from "./asciiArt.js";
 import { logWithDelay } from "./logWithDelay.js";
@@ -25,11 +65,6 @@ interface StoryLine {
   color: string;
   delay: number;
 }
-
-/**
- * Then cast or assert your imported JSON to that shape:
- */
-const storyData = storyJson as StoryLine[];
 
 /**
  * Map color strings to Chalk functions (or fallback to chalk.white)
