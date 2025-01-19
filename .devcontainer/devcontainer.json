@@ -11,7 +11,8 @@
 		"vscode": {
 			"extensions": [
 				"openai.openai-chatgpt-adhoc",
-				"ms-vscode-remote.remote-containers"
+				"ms-vscode-remote.remote-containers",
+				"ms-azuretools.vscode-docker"
 			]
 		}
 	}

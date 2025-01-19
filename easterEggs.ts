@@ -1,9 +1,11 @@
-// easterEggs.js
+// easterEggs.ts
 import chalk from "chalk";
 import { logWithDelay } from "./logWithDelay.js";
 
-// Easter Egg #1: RUN_EASTER_EGG
-export async function runEasterEgg() {
+/**
+ * Easter Egg #1: RUN_EASTER_EGG
+ */
+export async function runEasterEgg(): Promise<void> {
   if (process.env.RUN_EASTER_EGG) {
     await logWithDelay(
       chalk.bgMagenta(
@@ -20,16 +22,21 @@ export async function runEasterEgg() {
   }
 }
 
-// Easter Egg #2: Santa chance
-export async function maybeShowSanta(santaClausArt) {
+/**
+ * Easter Egg #2: Possibly show Santa
+ * @param santaClausArt The ASCII art of Santa
+ */
+export async function maybeShowSanta(santaClausArt: string): Promise<void> {
   if (Math.random() < 0.3) {
     await logWithDelay(chalk.red("🎅 Santa spotted!"), 0);
     await logWithDelay(santaClausArt, 0);
   }
 }
 
-// Easter Egg #3: ONCALL
-export async function onCallEasterEgg() {
+/**
+ * Easter Egg #3: ONCALL
+ */
+export async function onCallEasterEgg(): Promise<void> {
   if (process.env.ONCALL === "true") {
     await logWithDelay(
       chalk.red("🔔 Easter Egg #3: You are on-call tonight!"),
@@ -44,8 +51,10 @@ export async function onCallEasterEgg() {
   }
 }
 
-// Easter Egg #4: Rare debug log
-export async function debugEasterEgg() {
+/**
+ * Easter Egg #4: Rare debug log
+ */
+export async function debugEasterEgg(): Promise<void> {
   if (Math.random() < 0.1) {
     await logWithDelay(
       chalk.bgBlack.white(
@@ -56,8 +65,10 @@ export async function debugEasterEgg() {
   }
 }
 
-export async function codeCoverage() {
-  // Easter Egg #5: CODE_COVERAGE
+/**
+ * Easter Egg #5: CODE_COVERAGE
+ */
+export async function codeCoverage(): Promise<void> {
   const coverage = process.env.CODE_COVERAGE || "92.3%";
   await logWithDelay(
     chalk.greenBright(
