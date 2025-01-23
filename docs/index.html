@@ -10,6 +10,21 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap"
       rel="stylesheet"
     />
+    <!-- Swiper CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
+    />
+    <!-- Materialize CSS -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+      rel="stylesheet"
+    />
+    <!-- Material Icons -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
     <style>
       /* GLOBAL RESETS */
       * {
@@ -176,80 +191,120 @@
         margin-bottom: 1rem;
         color: #8af58a;
       }
-      .release-list {
-        list-style: none;
-        padding-left: 0;
-        margin-top: 0.5rem;
+
+      /* Swiper Customization */
+      .swiper {
+        width: 100%;
+        padding-bottom: 50px; /* Space for pagination */
       }
+
+      /* Release Item Styling */
       .release-item {
-        margin-bottom: 1rem;
-        padding: 0.8rem;
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 6px;
-        transition: background 0.3s ease;
+        padding: 1.5rem; /* Increased padding for better spacing */
+        background: rgba(
+          34,
+          34,
+          34,
+          0.9
+        ); /* Darker background for better contrast */
+        border-radius: 8px; /* Increased border-radius for a smoother look */
+        transition:
+          background 0.3s ease,
+          transform 0.3s ease;
+        height: 100%; /* Ensures equal height slides */
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Added shadow for depth */
       }
       .release-item:hover {
-        background: rgba(255, 255, 255, 0.15);
+        background: rgba(34, 34, 34, 1);
+        transform: translateY(-5px); /* Slight lift on hover */
       }
+
       .release-name {
-        font-weight: 600;
+        font-weight: 700; /* Increased font weight for emphasis */
         color: #4db8ff;
         text-decoration: none;
+        font-size: 1.4rem; /* Increased font size */
       }
+      .release-name:hover {
+        text-decoration: underline;
+      }
+
       .release-date {
-        font-size: 0.8rem;
+        font-size: 0.85rem; /* Slightly larger font size */
         color: #bbb;
-        margin-top: 0.3rem;
-      }
-      .release-body {
         margin-top: 0.5rem;
-        font-size: 0.9rem;
-        color: #eee;
-        line-height: 1.5;
       }
+
+      .release-body {
+        margin-top: 1rem;
+        font-size: 1rem;
+        color: #e0e0e0; /* Lighter color for better readability */
+        line-height: 1.6;
+      }
+
       .release-body a {
         color: #4db8ff;
         text-decoration: underline;
       }
-      .release-body ul,
-      .release-body ol {
-        margin-left: 1.3rem;
-        margin-top: 0.5rem;
-        margin-bottom: 0.5rem;
+
+      /* Adjust Swiper Navigation Buttons */
+      .swiper-button-next,
+      .swiper-button-prev {
+        color: #4db8ff; /* Customize arrow color */
+        width: 50px; /* Increased size for better visibility */
+        height: 50px;
+        background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          background 0.3s ease,
+          color 0.3s ease;
       }
-      .release-body li {
-        margin: 0.3rem 0;
-      }
-      .release-body blockquote {
-        border-left: 3px solid #aaa;
-        padding-left: 1rem;
-        margin-left: 0;
-        margin-right: 0;
-        color: #ccc;
-      }
-      .release-body h1,
-      .release-body h2,
-      .release-body h3 {
-        margin-top: 0.8rem;
-        margin-bottom: 0.5rem;
-        color: #c1ffc1;
-        font-weight: 600;
+      .swiper-button-next:hover,
+      .swiper-button-prev:hover {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.2);
       }
 
-      /* RESPONSIVE TWEAKS */
+      /* Swiper Pagination Bullets */
+      .swiper-pagination-bullet {
+        background: #4db8ff;
+        opacity: 0.7;
+      }
+      .swiper-pagination-bullet-active {
+        background: #ff3d3d;
+        opacity: 1;
+      }
+
+      /* Blurring Previous Slide */
+      .swiper-slide-prev {
+        filter: blur(5px);
+        opacity: 0.5;
+        transition:
+          filter 0.3s ease,
+          opacity 0.3s ease;
+      }
+
+      /* Ensure only active slide is fully visible */
+      .swiper-slide {
+        transition:
+          filter 0.3s ease,
+          opacity 0.3s ease;
+      }
+      .card {
+        background: none;
+      }
+      /* Responsive Adjustments */
       @media (max-width: 600px) {
-        .hero h1 {
-          font-size: 2rem;
-        }
-        .tree pre {
-          font-size: 1.1rem;
-        }
-        .container {
-          padding: 1rem;
-        }
-        .about,
-        .releases-container {
-          padding: 1rem;
+        .swiper-button-next,
+        .swiper-button-prev {
+          display: none; /* Hide arrows on small screens if desired */
         }
       }
     </style>
@@ -300,8 +355,7 @@
 *********
 ***
 ***
-      </pre
-        >
+        </pre>
       </div>
 
       <p>
@@ -334,9 +388,23 @@
       <!-- RELEASENOTES SECTION -->
       <div class="releases-container">
         <h2>Recent Releases</h2>
-        <ul id="release-list" class="release-list">
-          <li>Loading releases...</li>
-        </ul>
+
+        <!-- Swiper -->
+        <div class="swiper mySwiper">
+          <div class="swiper-wrapper" id="release-list">
+            <!-- Slides will be injected here dynamically -->
+            <div class="swiper-slide">
+              <div class="card">
+                <div class="card-content">
+                  <span class="card-title">Loading releases...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add Pagination -->
+          <div class="swiper-pagination"></div>
+        </div>
       </div>
 
       <footer>
@@ -350,10 +418,19 @@
 
     <!-- Showdown for Markdown -> HTML -->
     <script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <!-- Materialize JS -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"
+      defer
+    ></script>
 
     <script>
       document.addEventListener("DOMContentLoaded", async () => {
         const releaseList = document.getElementById("release-list");
+        let swiperInstance;
+
         try {
           // 1) Fetch releases from GitHub
           const response = await fetch(
@@ -365,61 +442,104 @@
           const releases = await response.json();
 
           if (releases.length === 0) {
-            releaseList.innerHTML = "<li>No releases found.</li>";
-            return;
-          }
-          releaseList.innerHTML = "";
+            releaseList.innerHTML = `
+              <div class="swiper-slide">
+                <div class="card">
+                  <div class="card-content">
+                    <span class="card-title">No releases found.</span>
+                  </div>
+                </div>
+              </div>
+            `;
+          } else {
+            releaseList.innerHTML = ""; // Clear loading message
 
-          // Create Showdown converter
-          const converter = new showdown.Converter();
+            // Create Showdown converter
+            const converter = new showdown.Converter();
 
-          // Regex for capturing @username references
-          // We'll transform "@username" -> link to https://github.com/username
-          function linkifyMentions(htmlString) {
-            return htmlString.replace(/@([\w-]+)/g, (match, username) => {
-              const url = `https://github.com/${username}`;
-              return `<a href="${url}" target="_blank" rel="noopener noreferrer">@${username}</a>`;
+            // Regex for capturing @username references
+            // We'll transform "@username" -> link to https://github.com/username
+            function linkifyMentions(htmlString) {
+              return htmlString.replace(/@([\w-]+)/g, (match, username) => {
+                const url = `https://github.com/${username}`;
+                return `<a href="${url}" target="_blank" rel="noopener noreferrer">@${username}</a>`;
+              });
+            }
+
+            // 2) Build each release slide
+            releases.forEach((release) => {
+              // Convert Markdown to HTML
+              const mdBody = release.body || "(No release notes)";
+              let htmlBody = converter.makeHtml(mdBody);
+
+              // Linkify @mentions
+              htmlBody = linkifyMentions(htmlBody);
+
+              // Create slide content using Materialize Card
+              const slideContent = `
+                <div class="card">
+                  <div class="card-content">
+                    <span class="card-title">
+                      <a
+                        class="release-name"
+                        href="${release.html_url}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        ${release.name || release.tag_name}
+                      </a>
+                    </span>
+                    <p class="release-date">
+                      Published on: ${new Date(release.published_at).toLocaleDateString()}
+                    </p>
+                    <div class="release-body">
+                      ${htmlBody}
+                    </div>
+                  </div>
+                </div>
+              `;
+
+              // Append slide
+              const slideDiv = document.createElement("div");
+              slideDiv.className = "swiper-slide";
+              slideDiv.innerHTML = slideContent;
+              releaseList.appendChild(slideDiv);
+            });
+
+            // Initialize Swiper after slides are added
+            swiperInstance = new Swiper(".mySwiper", {
+              slidesPerView: 1,
+              spaceBetween: 30,
+              loop: true,
+              pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+              },
+              navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+              },
+              // Disable autoplay for manual navigation
+              // Enable keyboard navigation
+              keyboard: {
+                enabled: true,
+                onlyInViewport: true,
+              },
+              // Optional: Add effect if desired
+              // For this setup, the blur is handled via CSS
             });
           }
-
-          // 2) Build each release item
-          releases.forEach((release) => {
-            const li = document.createElement("li");
-            li.className = "release-item";
-
-            // Release link
-            const nameLink = document.createElement("a");
-            nameLink.className = "release-name";
-            nameLink.href = release.html_url;
-            nameLink.target = "_blank";
-            nameLink.rel = "noopener noreferrer";
-            nameLink.textContent = release.name || release.tag_name;
-
-            // Publish date
-            const dateElem = document.createElement("div");
-            dateElem.className = "release-date";
-            const pubDate = new Date(release.published_at).toLocaleDateString();
-            dateElem.textContent = `Published on: ${pubDate}`;
-
-            // Convert Markdown to HTML
-            const mdBody = release.body || "(No release notes)";
-            let htmlBody = converter.makeHtml(mdBody);
-
-            // Linkify @mentions
-            htmlBody = linkifyMentions(htmlBody);
-
-            const bodyElem = document.createElement("div");
-            bodyElem.className = "release-body";
-            bodyElem.innerHTML = htmlBody;
-
-            // Append
-            li.appendChild(nameLink);
-            li.appendChild(dateElem);
-            li.appendChild(bodyElem);
-            releaseList.appendChild(li);
-          });
         } catch (error) {
-          releaseList.innerHTML = `<li>Error loading releases: ${error.message}</li>`;
+          releaseList.innerHTML = `
+            <div class="swiper-slide">
+              <div class="card">
+                <div class="card-content">
+                  <span class="card-title">Error loading releases:</span>
+                  <p>${error.message}</p>
+                </div>
+              </div>
+            </div>
+          `;
         }
       });
     </script>
