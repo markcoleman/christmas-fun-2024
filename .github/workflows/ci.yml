@@ -8,7 +8,31 @@ permissions:
 on:
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - '**.md'
+      - '**.markdown'
+      - '**.txt'
+      - 'docs/**'
+      - 'LICENSE'
+      - '.gitignore'
+      - '.editorconfig'
+      - '.github/*.md'
+      - 'assets/**'
+      - 'CODEOWNERS'
+      - '.vscode/**'
   pull_request:
+    paths-ignore:
+      - '**.md'
+      - '**.markdown'
+      - '**.txt'
+      - 'docs/**'
+      - 'LICENSE'
+      - '.gitignore'
+      - '.editorconfig'
+      - '.github/*.md'
+      - 'assets/**'
+      - 'CODEOWNERS'
+      - '.vscode/**'
 
 jobs:
   build_and_test:
