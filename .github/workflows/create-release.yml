@@ -58,14 +58,13 @@ jobs:
       #    We’ll transform multiline release notes to a single line, so shell won't break.
       #    Then pass them to docker build via --label.
       - name: Build Docker Image
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
-          # 1) Grab the commit message from the GitHub event
-          COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
-      
-          # 2) (Optional) Flatten or sanitize if it can contain newlines/quotes:
+          # 1) Flatten or sanitize if it can contain newlines/quotes:
           CLEAN_MSG=$(echo "$COMMIT_MESSAGE" | tr '\n' ' ' | sed 's/"/\\"/g')
       
-          # 3) Use CLEAN_MSG in your Docker build label
+          # 2) Use CLEAN_MSG in your Docker build label
           docker build \
             -t ghcr.io/${{ github.repository }}/my-christmas-app:${{ github.ref_name }} \
             -t ghcr.io/${{ github.repository }}/my-christmas-app:latest \
