@@ -1,51 +1,101 @@
 name: "create release"
 
 on:
+  # Automatic trigger on version-like tags, e.g., v1.2.3
   push:
     tags:
-      - 'v*.*.*'  # Trigger on tags like v1.2.3
+      - 'v*.*.*'
+  # Allow manual triggers in the Actions tab
+  workflow_dispatch:
+    inputs:
+      custom_version:
+        description: "Optional custom version/tag (override if no tag available)"
+        required: false
+        default: ""
 
-permissions: write-all
+permissions:
+  contents: write  # enough for creating/publishing releases
+  # or use "write-all" if you prefer broader perms
 
 jobs:
   update_release_and_build:
     runs-on: ubuntu-latest
-    
+
     steps:
-      # 1. Check out your repo
+      # 1. Check out code so we can fetch tags, do Docker build, etc.
       - name: Check out
         uses: actions/checkout@v3
 
-      # 2. Run Release Drafter to auto-generate/publish a release
+      # 2. Determine the version (either from "custom_version" input or github.ref_name)
+      - name: Determine version
+        id: determine_version
+        run: |
+          if [ "${{ github.event.inputs.custom_version }}" != "" ]; then
+            echo "Using custom version: ${{ github.event.inputs.custom_version }}"
+            echo "resolved_version=${{ github.event.inputs.custom_version }}" >> $GITHUB_OUTPUT
+          else
+            echo "No custom version provided or not applicable. Falling back to github.ref_name: ${{ github.ref_name }}"
+            echo "resolved_version=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+
+      # 3. Validate that the resolved version is a real tag in this repo,
+      #    unless we are ok with skipping this check if it's a manual run without a real tag.
+      - name: Validate Tag
+        id: validate_tag
+        run: |
+          # We'll fetch all remote tags so we can check if the version exists
+          git fetch --tags
+
+          # Grab the resolved_version from previous step
+          VERSION="${{ steps.determine_version.outputs.resolved_version }}"
+
+          if [ -z "$VERSION" ]; then
+            echo "No version specified (empty). Failing..."
+            exit 1
+          fi
+
+          # Check if git can rev-parse the version as a valid tag ref
+          if git rev-parse "$VERSION" >/dev/null 2>&1; then
+            echo "valid_tag=true" >> $GITHUB_OUTPUT
+            echo "Tag '$VERSION' found in git history."
+          else
+            echo "Provided version '$VERSION' is NOT a known tag in the repo. Failing..."
+            echo "valid_tag=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+
+      # 4. (Optional) Run Release Drafter to auto-generate/publish a release
+      #    Only do this if the event is a push (not a manual dispatch) AND the tag is valid
       - name: Run Release Drafter
+        if: ${{ github.event_name == 'push' && steps.validate_tag.outputs.valid_tag == 'true' }}
         uses: release-drafter/release-drafter@v5
         with:
-          version: ${{ github.ref_name }}  # Use the current tag as the version
-          publish: true                    # Immediately publish the release (vs. draft)
+          version: ${{ steps.determine_version.outputs.resolved_version }}
+          publish: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 3. Fetch the now-published release to get its body (the notes)
+      # 5. (Optional) Get Release Notes if needed
+      #    You might only do this on push events, or skip if manual. 
+      #    We'll show an example that runs only if it's a push + valid tag
       - name: Get Release Notes
         id: get_release_notes
+        if: ${{ github.event_name == 'push' && steps.validate_tag.outputs.valid_tag == 'true' }}
         uses: actions/github-script@v6
         with:
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
-            const tag = '${{ github.ref_name }}'; // e.g. 'v1.2.3'
+            const tag = "${{ steps.determine_version.outputs.resolved_version }}";
 
-            // Retrieve the Release by tag
             const { data: release } = await github.rest.repos.getReleaseByTag({
               owner,
               repo,
               tag
             });
             
-            // The 'body' is what Release Drafter generated
             return release.body;
 
-      # 4. Log in to GitHub Container Registry using the built-in GitHub token
+      # 6. Log in to GitHub Container Registry
       - name: Log in to GHCR
         uses: docker/login-action@v2
         with:
@@ -53,28 +103,32 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # 5. Build Docker image from Dockerfile, injecting release notes as a label
-      #
-      #    We’ll transform multiline release notes to a single line, so shell won't break.
-      #    Then pass them to docker build via --label.
+      # 7. Build Docker image from Dockerfile, injecting release notes or commit message as a label
       - name: Build Docker Image
-        env:
-          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        id: build_docker
         run: |
-          # 1) Flatten or sanitize if it can contain newlines/quotes:
-          CLEAN_MSG=$(echo "$COMMIT_MESSAGE" | tr '\n' ' ' | sed 's/"/\\"/g')
-      
-          # 2) Use CLEAN_MSG in your Docker build label
+          # We'll transform multiline release notes to a single line, if we actually fetched them
+          if [ "${{ steps.get_release_notes.outputs.result }}" != "" ]; then
+            RELEASE_NOTES=$(echo "${{ steps.get_release_notes.outputs.result }}" | tr '\n' ' ' | sed 's/"/\\"/g')
+          else
+            RELEASE_NOTES="(No release notes or run was manual.)"
+          fi
+
+          # Build with 2 tags: resolved version and "latest"
+          VERSION="${{ steps.determine_version.outputs.resolved_version }}"
+
           docker build \
-            -t ghcr.io/${{ github.repository }}/my-christmas-app:${{ github.ref_name }} \
+            -t ghcr.io/${{ github.repository }}/my-christmas-app:$VERSION \
             -t ghcr.io/${{ github.repository }}/my-christmas-app:latest \
-            --label "org.opencontainers.image.description=${CLEAN_MSG}" \
-            --label "org.opencontainers.image.version=${{ github.ref_name }}" \
+            --label "org.opencontainers.image.description=${RELEASE_NOTES}" \
+            --label "org.opencontainers.image.version=$VERSION" \
             -f Dockerfile .
 
-      # 6. Push both tags to GHCR
+      # 8. Push Docker images
       - name: Push Docker Image (version tag)
-        run: docker push ghcr.io/${{ github.repository }}/my-christmas-app:${{ github.ref_name }}
+        run: |
+          VERSION="${{ steps.determine_version.outputs.resolved_version }}"
+          docker push ghcr.io/${{ github.repository }}/my-christmas-app:$VERSION
 
       - name: Push Docker Image (latest)
         run: docker push ghcr.io/${{ github.repository }}/my-christmas-app:latest
