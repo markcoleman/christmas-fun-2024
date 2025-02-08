@@ -1,32 +1,31 @@
 name: "CodeQL Analysis"
 
 on:
-  pull_request:
-    # Trigger on pull requests, but ignore changes only in .md files
-    paths-ignore:
-      - '**/*.md'
   push:
-    # Also consider your push triggers if you have them
-    # Only run codeql on certain file types or ignore .md
     paths-ignore:
       - '**/*.md'
+  pull_request:
+    paths-ignore:
+      - '**/*.md'
+
+permissions:
+  contents: read
+  security-events: write
 
 jobs:
   analyze:
-    name: Analyze (CodeQL)
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
         with:
           languages: javascript
-          # other config...
-
+      
       - name: Autobuild
         uses: github/codeql-action/autobuild@v2
-
+      
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
