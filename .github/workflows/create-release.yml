@@ -15,6 +15,7 @@ on:
 
 permissions:
   contents: write  # enough for creating/publishing releases
+  packages: write  # needed for pushing Docker images to GHCR
   # or use "write-all" if you prefer broader perms
 
 jobs:
