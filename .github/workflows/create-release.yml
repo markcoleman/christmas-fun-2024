@@ -82,7 +82,7 @@ jobs:
       - name: Get Release Notes
         id: get_release_notes
         if: ${{ github.event_name == 'push' && steps.validate_tag.outputs.valid_tag == 'true' }}
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             const owner = context.repo.owner;
