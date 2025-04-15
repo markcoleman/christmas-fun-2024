@@ -1,18 +1,42 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for more information:
-# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
-# https://containers.dev/guide/dependabot
-
 version: 2
 updates:
-  - package-ecosystem: "devcontainers"
+  # 1) GitHub Actions
+  - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: weekly
-  - package-ecosystem: "npm"
-    directory: "/"
-    schedule:
-      interval: "daily"
-      # Optional limit for open PRs from Dependabot at once
+      interval: "weekly"      # Check for updates weekly
+      day: "monday"           # (optional) set a specific day
+    labels:
+      - "dependency"
+      - "actions"
+    assignees:
+      - "markcoleman"
     open-pull-requests-limit: 5
+
+  # 2) NPM Dependencies (JavaScript/TypeScript)
+  - package-ecosystem: "npm"
+    directory: "/"            # If your package.json is at root; else adjust
+    schedule:
+      interval: "daily"       # Check for updates daily
+    labels:
+      - "dependency"
+      - "npm"
+    assignees:
+      - "markcoleman"
+    open-pull-requests-limit: 5
+    # optionally ignore certain dev dependencies or pinned versions:
+    # ignore:
+    #   - dependency-name: "some-package"
+    #     versions: "<=1.2.3"
+
+  # 3) Dev Container References
+  - package-ecosystem: "devcontainers"
+    directory: "/"            # If your devcontainer.json is in root
+    schedule:
+      interval: "weekly"      # Check for updates weekly
+    labels:
+      - "dependency"
+      - "devcontainer"
+    assignees:
+      - "markcoleman"
+    open-pull-requests-limit: 3
