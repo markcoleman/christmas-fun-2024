@@ -1,0 +1,25 @@
+# Example CODEOWNERS File
+# Place at: .github/CODEOWNERS or CODEOWNERS in the repo root
+
+# Each line: 'pattern'   'github username or team'
+
+# 1) Mark as the default owner for entire repo
+# This means any file that doesn't match more specific rules below
+# will automatically request Mark for review
+* @markcoleman
+
+# 2) Specific ownership for certain directories/files
+# For example, if we have an npm project in /src, we might do:
+src/ @markcoleman
+
+# If you have multiple owners for a directory:
+# src/frontend/ @markcoleman @some-other-user
+
+# 3) Specific ownership for GitHub Actions workflows
+.github/workflows/ @markcoleman
+
+# 4) For a doc directory
+docs/ @markcoleman
+
+# If you want to exclude or override certain files, do more specific patterns above
+# e.g.: "package.json" @markcoleman
