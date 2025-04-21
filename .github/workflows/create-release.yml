@@ -69,7 +69,7 @@ jobs:
       #    Only do this if the event is a push (not a manual dispatch) AND the tag is valid
       - name: Run Release Drafter
         if: ${{ github.event_name == 'push' && steps.validate_tag.outputs.valid_tag == 'true' }}
-        uses: release-drafter/release-drafter@v5
+        uses: release-drafter/release-drafter@v6
         with:
           version: ${{ steps.determine_version.outputs.resolved_version }}
           publish: true
