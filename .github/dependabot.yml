@@ -6,9 +6,6 @@ updates:
     schedule:
       interval: "weekly"      # Check for updates weekly
       day: "monday"           # (optional) set a specific day
-    labels:
-      - "dependency"
-      - "actions"
     assignees:
       - "markcoleman"
     open-pull-requests-limit: 5
@@ -18,9 +15,6 @@ updates:
     directory: "/"            # If your package.json is at root; else adjust
     schedule:
       interval: "daily"       # Check for updates daily
-    labels:
-      - "dependency"
-      - "npm"
     assignees:
       - "markcoleman"
     open-pull-requests-limit: 5
@@ -34,9 +28,6 @@ updates:
     directory: "/"            # If your devcontainer.json is in root
     schedule:
       interval: "weekly"      # Check for updates weekly
-    labels:
-      - "dependency"
-      - "devcontainer"
     assignees:
       - "markcoleman"
     open-pull-requests-limit: 3
